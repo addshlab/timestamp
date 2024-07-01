@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUIDv7 Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .output {
+            margin-top: 20px;
+        }
+        .output div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>UUIDv7 Generator</h1>
+<button id="generateButton">Generate timestamp</button>
+
+<div class="output">
+    <div><strong>UUIDv7:</strong> <span id="uuidv7"></span></div>
+    <div><strong>Local Time (ISO 8601):</strong> <span id="localTime"></span></div>
+    <div><strong>UTC (ISO 8601):</strong> <span id="utcTime"></span></div>
+</div>
+
+<script>
+    function generateUUIDv7() {
+        return 'tttttttt-tttt-7xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.trunc(Math.random() * 16);
+            const v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        }).replace(/^[t]{8}-[t]{4}/, function() {
+            const unixtimestamp = Date.now().toString(16).padStart(12, '0');
+            return unixtimestamp.slice(0, 8) + '-' + unixtimestamp.slice(8);
+        });
+    }
+
+    function pad(number) {
+        return number < 10 ? '0' + number : number;
+    }
+
+    function getLocalISOStringWithOffset(date) {
+        const tzo = -date.getTimezoneOffset(),
+              dif = tzo >= 0 ? '+' : '-',
+              pad = function(num) {
+                  return (num < 10 ? '0' : '') + num;
+              };
+
+        return date.getFullYear() +
+            '-' + pad(date.getMonth() + 1) +
+            '-' + pad(date.getDate()) +
+            'T' + pad(date.getHours()) +
+            ':' + pad(date.getMinutes()) +
+            ':' + pad(date.getSeconds()) +
+            '.' + (date.getMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+            dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+            pad(Math.abs(tzo) % 60);
+    }
+
+    function updateTime() {
+        const now = new Date();
+        const uuidv7 = generateUUIDv7();
+        const localTime = getLocalISOStringWithOffset(now);
+        const utcTime = now.toISOString();
+
+        document.getElementById('uuidv7').textContent = uuidv7;
+        document.getElementById('localTime').textContent = localTime;
+        document.getElementById('utcTime').textContent = utcTime;
+    }
+
+    document.getElementById('generateButton').addEventListener('click', updateTime);
+</script>
+
+</body>
+</html>
