@@ -15,17 +15,21 @@
         .output div {
             margin-bottom: 10px;
         }
+        .cap {
+            display: inline-block;
+            min-width: 100px;
+        }
     </style>
 </head>
 <body>
 
-<h1>UUIDv7 Generator</h1>
-<button id="generateButton">Generate timestamp</button>
+<h1>Timestamp Generator</h1>
+<button id="generateButton">Generate</button>
 
 <div class="output">
-    <div><strong>UUIDv7:</strong> <span id="uuidv7"></span></div>
-    <div><strong>Local Time (ISO 8601):</strong> <span id="localTime"></span></div>
-    <div><strong>UTC (ISO 8601):</strong> <span id="utcTime"></span></div>
+    <div><span class="cap"><strong>UUIDv7:</strong></span> <span id="uuidv7"></span></div>
+    <div><span class="cap"><strong>Local Time:</strong></span> <span id="localTime"></span></div>
+    <div><span class="cap"><strong>UTC:</strong></span> <span id="utcTime"></span></div>
 </div>
 
 <script>
