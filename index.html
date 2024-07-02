@@ -20,6 +20,21 @@
             min-width: 100px;
             text-align: right;
         }
+        .copyable {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -28,10 +43,12 @@
 <button id="generateButton">Generate</button>
 
 <div class="output">
-    <div><span class="cap"><strong>UUIDv7:</strong></span> <span id="uuidv7"></spsn></div>
-    <div><span class="cap"><strong>Local Time:</strong></span> <span id="localTime"></span></div>
-    <div><span class="cap"><strong>UTC:</strong></span> <span id="utcTime"></span></div>
+    <div><span class="cap"><strong>UUIDv7:</strong></span> <span id="uuidv7" class="copyable"></span></div>
+    <div><span class="cap"><strong>Local Time:</strong></span> <span id="localTime" class="copyable"></span></div>
+    <div><span class="cap"><strong>UTC:</strong></span> <span id="utcTime" class="copyable"></span></div>
 </div>
+
+<div id="notification" class="notification">Copied!</div>
 
 <script>
     function generateUUIDv7() {
@@ -78,7 +95,28 @@
         document.getElementById('utcTime').textContent = utcTime;
     }
 
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            showNotification();
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    }
+
+    function showNotification() {
+        const notification = document.getElementById('notification');
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 2000);
+    }
+
     document.getElementById('generateButton').addEventListener('click', updateTime);
+    document.querySelectorAll('.copyable').forEach(item => {
+        item.addEventListener('click', () => {
+            copyToClipboard(item.textContent);
+        });
+    });
 </script>
 
 </body>
